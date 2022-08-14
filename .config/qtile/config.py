@@ -114,6 +114,12 @@ screens = [
 
                 widget.Spacer(background="00000000"),
 
+                widget.CPU(format=" {load_percent}%", background="ebcb8b"),
+
+                widget.Memory(format=" {MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}", background="a3be8c"),
+
+                widget.Memory(format=" {SwapUsed:.0f}{ms}/{SwapTotal:.0f}{ms}", background="bf616a"),
+
                 widget.TextBox(text="冷", background="b48ead"),
                 widget.CurrentLayout(background="b48ead"),
 
@@ -124,13 +130,16 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
 
-                widget.TextBox(text="", background="bf616a"),
-                widget.Clock(format="%a %Y-%m-%d %I:%M:%S %p", background="bf616a"),
+                widget.TextBox(text="", background="5e81ac"),
+                widget.Clock(format="%a %Y-%m-%d %I:%M:%S %p", background="5e81ac"),
+
+                
+
                 widget.Systray(),
             ],
             30,
-            # border_width=[5, 5, 5, 5],  # Draw top and bottom borders
-            # border_color=["000000", "000000", "000000", "000000"]  # Borders are magenta
+            border_width=[5, 5, 5, 5],  # Draw top and bottom borders
+            border_color=["00000000", "00000000", "00000000", "00000000"]  # Borders are magenta
         ),
     ),
 ]

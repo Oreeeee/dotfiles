@@ -1,1 +1,1 @@
-exec twm
+exec qtile start
