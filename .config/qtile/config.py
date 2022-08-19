@@ -1,15 +1,10 @@
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
 
 mod = "mod4"
-terminal = guess_terminal()
 
 keys = [
-    # A list of available commands that can be bound to keys can be found
-    # at https://docs.qtile.org/en/latest/manual/config/lazy.html
-    # Switch between windows
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
@@ -38,13 +33,17 @@ keys = [
         lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack",
     ),
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod], "Return", lazy.spawn("alacritty"), desc="Launch terminal"),
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
-    Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod, "shift"], "r", lazy.reload_config(), desc="Reload the config"),
+    Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key([mod], "d", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+
+    Key([mod], "b", lazy.spawn("firefox"), desc="Spawn browser"),
+    Key([mod], "p", lazy.spawn("keepassxc"), desc="Spawn password manager"),
+    Key([mod], "a", lazy.spawn("pavucontrol"), desc="Spawn pavucontrol"),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -90,7 +89,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="Ubuntu Nerd Font",
+    font="Ubuntu",
     fontsize=14,
     padding=5,
     background="2e3440",
@@ -100,8 +99,11 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
+        wallpaper='~/.config/qtile/background.png',
+        wallpaper_mode='stretch',
         top=bar.Bar(
             [
+                
                 widget.GroupBox(
                     active = "5e81ac",
                     inactive = "b48ead",
@@ -114,13 +116,13 @@ screens = [
 
                 widget.Spacer(background="00000000"),
 
-                widget.CPU(format=" {load_percent}%", background="ebcb8b"),
+                widget.CPU(format=" {load_percent}%", background="ebcb8b", font="Ubuntu Nerd Font"),
 
-                widget.Memory(format=" {MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}", background="a3be8c"),
+                widget.Memory(format=" {MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}", background="a3be8c", font="Ubuntu Nerd Font"),
 
-                widget.Memory(format=" {SwapUsed:.0f}{ms}/{SwapTotal:.0f}{ms}", background="bf616a"),
+                widget.Memory(format=" {SwapUsed:.0f}{ms}/{SwapTotal:.0f}{ms}", background="bf616a", font="Ubuntu Nerd Font"),
 
-                widget.TextBox(text="冷", background="b48ead"),
+                widget.TextBox(text="冷", background="b48ead", font="Ubuntu Nerd Font"),
                 widget.CurrentLayout(background="b48ead"),
 
                 widget.Chord(
@@ -130,16 +132,16 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
 
-                widget.TextBox(text="", background="5e81ac"),
-                widget.Clock(format="%a %Y-%m-%d %I:%M:%S %p", background="5e81ac"),
-
-                
+                # widget.TextBox(text="", background="5e81ac"),
+                widget.Clock(format=" %a %Y-%m-%d %I:%M:%S %p", background="5e81ac", font="Ubuntu Nerd Font"),
 
                 widget.Systray(),
             ],
+            
             30,
-            border_width=[5, 5, 5, 5],  # Draw top and bottom borders
-            border_color=["00000000", "00000000", "00000000", "00000000"]  # Borders are magenta
+            background="#00000000",
+            # border_width=[5, 5, 5, 5],  # Draw top and bottom borders
+            # border_color=["00000000", "00000000", "00000000", "00000000"]  # Borders are magenta
         ),
     ),
 ]
