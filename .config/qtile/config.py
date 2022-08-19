@@ -99,7 +99,7 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        wallpaper='~/.config/qtile/background.png',
+        wallpaper='/usr/share/backgrounds/archlinux/landscape.jpg',
         wallpaper_mode='stretch',
         top=bar.Bar(
             [
@@ -145,6 +145,9 @@ screens = [
         ),
     ),
 ]
+
+# Start picom
+# lazy.spawn("picom")
 
 # Drag floating layouts.
 mouse = [
