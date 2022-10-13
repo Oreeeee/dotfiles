@@ -1,10 +1,41 @@
+# Copyright (c) 2010 Aldo Cortesi
+# Copyright (c) 2010, 2014 dequis
+# Copyright (c) 2012 Randall Ma
+# Copyright (c) 2012-2014 Tycho Andersen
+# Copyright (c) 2012 Craig Barnes
+# Copyright (c) 2013 horsik
+# Copyright (c) 2013 Tao Sauvage
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 
+
 mod = "mod4"
+terminal = "alacritty"
 
 keys = [
+    # A list of available commands that can be bound to keys can be found
+    # at https://docs.qtile.org/en/latest/manual/config/lazy.html
+    # Switch between windows
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
@@ -33,17 +64,13 @@ keys = [
         lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack",
     ),
-    Key([mod], "Return", lazy.spawn("alacritty"), desc="Launch terminal"),
+    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
-    Key([mod, "shift"], "r", lazy.reload_config(), desc="Reload the config"),
-    Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "d", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-
-    Key([mod], "b", lazy.spawn("firefox"), desc="Spawn browser"),
-    Key([mod], "p", lazy.spawn("keepassxc"), desc="Spawn password manager"),
-    Key([mod], "a", lazy.spawn("pavucontrol"), desc="Spawn pavucontrol"),
+    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
+    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -73,14 +100,14 @@ for i in groups:
     )
 
 layouts = [
-    # layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
-    # layout.Max(),
+    #layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
+    #layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    layout.MonadTall(margin=6, border_focus="4c566a", border_normal="3b4252"),
-    layout.MonadWide(margin=6, border_focus="4c566a", border_normal="3b4252"),
+    layout.MonadTall(margin=10, border_focus="#4c566a", border_normal="#3b4252"),
+    layout.MonadWide(margin=10, border_focus="#4c566a", border_normal="#3b4252"),
     # layout.RatioTile(),
     # layout.Tile(),
     # layout.TreeTab(),
@@ -89,65 +116,43 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="Ubuntu",
-    fontsize=14,
-    padding=5,
-    background="2e3440",
-    foreground="eceff4",
+    font="Ubuntu Nerd Font",
+    fontsize=13,
+    padding=3,
 )
 extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        wallpaper='/usr/share/backgrounds/archlinux/landscape.jpg',
-        wallpaper_mode='stretch',
-        top=bar.Bar(
+        bottom=bar.Bar(
             [
-                
                 widget.GroupBox(
-                    active = "5e81ac",
-                    inactive = "b48ead",
-                    this_current_screen_border = "bf616a",
-                    highlight_method = "line",
-                    highlight_color=["2e3440", "2e3440"],
-                    center_aligned=True,
+                    active="#e5e9f0",
+                    inactive="#4c566a",
+                    disable_drag=True,
+                    highlight_method='line',
+                    this_current_screen_border="#bf616a",
+                    highlight_color=["#434c5e"]
                 ),
-                widget.Prompt(prompt="Run: ", background="ebcb8b"),
-
-                widget.Spacer(background="00000000"),
-
-                widget.CPU(format=" {load_percent}%", background="ebcb8b", font="Ubuntu Nerd Font"),
-
-                widget.Memory(format=" {MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}", background="a3be8c", font="Ubuntu Nerd Font"),
-
-                widget.Memory(format=" {SwapUsed:.0f}{ms}/{SwapTotal:.0f}{ms}", background="bf616a", font="Ubuntu Nerd Font"),
-
-                widget.TextBox(text="冷", background="b48ead", font="Ubuntu Nerd Font"),
-                widget.CurrentLayout(background="b48ead"),
-
+                widget.Prompt(),
+                widget.WindowName(),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-
-                # widget.TextBox(text="", background="5e81ac"),
-                widget.Clock(format=" %a %Y-%m-%d %I:%M:%S %p", background="5e81ac", font="Ubuntu Nerd Font"),
-
+                widget.CurrentLayout(),
+                widget.Clock(format="%Y-%m-%d %A %H:%M:%S %p"),
+                widget.TextBox(foreground="#ebcb8b", text="\ueb6e"),
                 widget.Systray(),
             ],
-            
-            30,
-            background="#00000000",
-            # border_width=[5, 5, 5, 5],  # Draw top and bottom borders
-            # border_color=["00000000", "00000000", "00000000", "00000000"]  # Borders are magenta
+            size=30,
+            background="#2e3440",
+            foreground="#e5e9f0"
         ),
     ),
 ]
-
-# Start picom
-# lazy.spawn("picom")
 
 # Drag floating layouts.
 mouse = [
@@ -184,4 +189,12 @@ auto_minimize = True
 # When using the Wayland backend, this can be used to configure input devices.
 wl_input_rules = None
 
+# XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
+# string besides java UI toolkits; you can see several discussions on the
+# mailing lists, GitHub issues, and other WM documentation that suggest setting
+# this string if your java app doesn't work correctly. We may as well just lie
+# and say that we're a working one by default.
+#
+# We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
+# java that happens to be on java's whitelist.
 wmname = "LG3D"
