@@ -25,7 +25,7 @@
 # SOFTWARE.
 
 from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, Group, Key, Match, Screen, KeyChord
 from libqtile.lazy import lazy
 import subprocess
 
@@ -39,6 +39,9 @@ def get_wifi_name():
 
 mod = "mod4"
 terminal = "alacritty"
+browser = "firefox"
+keybind_apps = ("discord", "element")
+
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -78,7 +81,13 @@ keys = [
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    
+    Key([mod], "d", lazy.spawn("rofi -show drun"), desc="Spawn rofi drun"),
+    Key([mod], "r", lazy.spawn("rofi -show run"), desc="Spawn rofi run"),
+
+    Key([mod, "shift"], "b", lazy.spawn(browser), desc="Spawn browser"),
+    Key([mod, "shift"], "m", lazy.spawn(keybind_apps), desc="Spawn most used apps"),
+    Key([mod, "shift"], "z", lazy.spawn("keepassxc"), desc="Spawn password manager"),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -108,19 +117,10 @@ for i in groups:
     )
 
 layouts = [
-    #layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
-    #layout.Max(),
-    # Try more layouts by unleashing below layouts.
-    # layout.Stack(num_stacks=2),
-    # layout.Bsp(),
-    # layout.Matrix(),
     layout.MonadTall(margin=10, border_focus="#4c566a", border_normal="#3b4252"),
     layout.MonadWide(margin=10, border_focus="#4c566a", border_normal="#3b4252"),
-    # layout.RatioTile(),
-    # layout.Tile(),
-    # layout.TreeTab(),
-    # layout.VerticalTile(),
-    # layout.Zoomy(),
+    layout.Spiral(margin=10, border_focus="#4c566a", border_normal="#3b4252"),
+    layout.Floating(border_focus="#4c566a", border_normal="#3b4252"),
 ]
 
 widget_defaults = dict(
@@ -145,14 +145,7 @@ screens = [
                     highlight_color=["#434c5e"]
                 ),
                 widget.Image(filename="~/.config/qtile/assets/corner0.png"),
-                widget.Prompt(),
                 widget.WindowName(background="#5e81ac"),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
                 widget.Image(filename="~/.config/qtile/assets/corner1.png"),
                 widget.TextBox(background="#a3be8c", text=f"\ufaa8 {get_wifi_name()}"),
                 widget.Image(filename="~/.config/qtile/assets/corner2.png"),
