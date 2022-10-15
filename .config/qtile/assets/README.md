@@ -1,0 +1,2 @@
+# Why does this directory contain corner PNGs?
+Widget corners are actually images. Outside is the color of the previous widget and inside is the color of a widget. You can copy one of the PNGs and modify it for your needs.

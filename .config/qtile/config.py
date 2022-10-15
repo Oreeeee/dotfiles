@@ -27,7 +27,15 @@
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
+import subprocess
 
+def get_wifi_name():
+    name = subprocess.run("iwgetid", capture_output=True).stdout.decode("UTF-8")
+    print(name)
+    if name == "":
+        return "Ethernet/Offline"
+    else:
+        return name
 
 mod = "mod4"
 terminal = "alacritty"
@@ -142,9 +150,16 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.CurrentLayout(),
-                widget.Clock(format="%Y-%m-%d %A %H:%M:%S %p"),
-                widget.TextBox(foreground="#ebcb8b", text="\ueb6e"),
+                widget.Image(filename="~/.config/qtile/assets/corner1.png"),
+                widget.TextBox(background="#a3be8c", text=f"\ufaa8 {get_wifi_name()}"),
+                widget.Image(filename="~/.config/qtile/assets/corner2.png"),
+                widget.PulseVolume(background="#d08770", fmt="\uf028 {}"),
+                widget.Image(filename="~/.config/qtile/assets/corner3.png"),
+                widget.CurrentLayout(background="#ebcb8b", fmt="\ufab1 {}"),
+                widget.Image(filename="~/.config/qtile/assets/corner4.png"),
+                widget.Clock(background="#8fbcbb", format="\ueab0 %Y-%m-%d %a"),
+                widget.Image(filename="~/.config/qtile/assets/corner5.png"),
+                widget.Clock(background="#b48ead", format="\uf64f %H:%M:%S"),
                 widget.Systray(),
             ],
             size=30,
