@@ -132,6 +132,8 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
+        wallpaper="~/wallpaper.png",
+        wallpaper_mode="stretch",
         bottom=bar.Bar(
             [
                 widget.GroupBox(
@@ -142,8 +144,9 @@ screens = [
                     this_current_screen_border="#bf616a",
                     highlight_color=["#434c5e"]
                 ),
+                widget.Image(filename="~/.config/qtile/assets/corner0.png"),
                 widget.Prompt(),
-                widget.WindowName(),
+                widget.WindowName(background="#5e81ac"),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
