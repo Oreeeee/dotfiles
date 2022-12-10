@@ -37,6 +37,23 @@ def get_wifi_name():
     else:
         return name
 
+def go_to_group(name):
+    def _inner(qtile):
+        if len(qtile.screens) == 1:
+            qtile.groups_map[name].cmd_toscreen()
+            return
+
+        if name in '123':
+            qtile.focus_screen(0)
+            qtile.groups_map[name].cmd_toscreen()
+        else:
+            qtile.focus_screen(1)
+            qtile.groups_map[name].cmd_toscreen()
+
+    return _inner
+
+
+
 mod = "mod4"
 terminal = "alacritty"
 browser = "firefox"
@@ -192,6 +209,9 @@ floating_layout = layout.Floating(
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
+
+for i in groups:
+    keys.append(Key([mod], i.name, lazy.function(go_to_group(i.name))))
 
 # If things like steam games want to auto-minimize themselves when losing
 # focus, should we respect this or not?
